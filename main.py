@@ -27,7 +27,7 @@ if __name__ == '__main__':
         param = json.load(paramfile)
 
     model = Net(14*14)
-    optimizer = optim.SGD(model.parameters(), lr=param['learning_rate'])
+    optimizer = optim.Adam(model.parameters(), lr=param['learning_rate'])
     loss_func = nn.CrossEntropyLoss()
     for epoch in range(1, int(param['num_epochs']) + 1):
 
@@ -43,5 +43,12 @@ if __name__ == '__main__':
             optimizer.step()
 
             if (epoch + 1) % 10 == 0:
+
+                estimates = output.argmax(1)
+                actual = targets[0]
+                differences = np.array(np.subtract(estimates, actual))
+                num_correct = len(differences[np.where(differences == 0)])
+                accuracy = 100*(num_correct / len(actual))
                 print('Epoch [{}/{}]'.format(epoch+1, param['num_epochs'])+\
-                      '\tTraining Loss: {:.4f}'.format(loss.item()))
+                      '\tTraining Loss: {:.4f}'.format(loss.item())+\
+                      '\tAccuracy: {:.4f}'.format(accuracy))
