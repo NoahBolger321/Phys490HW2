@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
+import numpy as np
 
 class MnistData():
     def __init__(self, test_size):
@@ -12,7 +12,7 @@ class MnistData():
         """
         mnist_df = pd.read_csv('data/even_mnist.csv', header=None, names=['data'])
         mnist_df['labels'] = pd.to_numeric(mnist_df['data'].str[-1])
-        mnist_df['data'] = mnist_df['data'].apply(lambda d: list(map(int, d.split())))
+        mnist_df['data'] = mnist_df['data'].apply(lambda d: list(map(int, d.split()))[:-1])
 
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(
                                                                 mnist_df['data'],
